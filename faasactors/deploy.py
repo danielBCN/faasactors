@@ -103,3 +103,14 @@ def sendMessage(queueName,message):
     response = queue.send_message(MessageBody=message)
 
 
+def addWrapper(userFunc):
+    fun = lambda_handler
+
+    return fun
+
+
+def lambda_handler():
+    print("hello")
+'''
+def lambda_handler(event, context):
+    print("hello")'''
