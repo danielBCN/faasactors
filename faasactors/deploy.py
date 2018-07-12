@@ -101,3 +101,8 @@ def sendMessage(queueName,message):
 
     # Create a new message
     response = queue.send_message(MessageBody=message)
+
+
+def addWrapper(userFunc):
+    fun = def handleRequest(): print("hello")
+    return fun
