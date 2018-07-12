@@ -78,3 +78,26 @@ def set_lambda_concurrency(name, concurrency_value):
     response = lambdacli.put_function_concurrency(FunctionName=name, ReservedConcurrentExecutions=concurrency_value)
     print(response)
     print("Lambda {} concurrency limit set to {} successfully.".format(name, concurrency_value))
+
+
+def getNewQueue(name,lambdaName):
+    # Get the service resource
+    sqs = boto3.resource('sqs')
+
+    # Create the queue. This returns an SQS.Queue instance
+    queue = sqs.create_queue(QueueName=name, Attributes={'DelaySeconds': '0'})
+    boto3.client("lambda").create_event_source_mapping(
+        EventSourceArn=queue.attributes.get('QueueArn'),
+        FunctionName=lambdaName,
+    )
+
+
+def sendMessage(queueName,message):
+    # Get the service resource
+    sqs = boto3.resource('sqs')
+
+    # Get the queue
+    queue = sqs.get_queue_by_name(QueueName=queueName)
+
+    # Create a new message
+    response = queue.send_message(MessageBody=message)
