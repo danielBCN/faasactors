@@ -71,3 +71,10 @@ def delete_lambda(name):
     response = lambdacli.delete_function(FunctionName=name)
     print(response)
     print("Lambda {} deleted successfully.".format(name))
+
+
+def set_lambda_concurrency(name, concurrency_value):
+    """ Sets the maximum amount of concurrent executions to a lambda function with name *name*."""
+    response = lambdacli.put_function_concurrency(FunctionName=name, ReservedConcurrentExecutions=concurrency_value)
+    print(response)
+    print("Lambda {} concurrency limit set to {} successfully.".format(name, concurrency_value))
