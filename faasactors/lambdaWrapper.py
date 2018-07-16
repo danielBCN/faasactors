@@ -15,8 +15,6 @@ def lambdaWrapper(event, context):
     invoke = getattr(inst, method)
     invoke()
 
-    u = userCode()
-    u.userFunction()
 
     # writeToDB()
 

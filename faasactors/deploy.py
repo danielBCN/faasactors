@@ -24,7 +24,7 @@ def get_lambda_client():
     return lambdacli
 
 
-def new_lambda(name, handler):
+def new_lambda(name, handler, actorPath):
     """
     Packages all files that the function *handler* depends on into a zip.
     Creates a new lambda with name *name* on AWS using that zip.
@@ -32,7 +32,7 @@ def new_lambda(name, handler):
     such as SNS and SQS. (But can't connect directly to Redis)
     """
     # zip function-module and dependencies
-    zipfile, lamhand = package_with_dependencies(handler)
+    zipfile, lamhand = package_with_dependencies(handler, actorPath= actorPath)
 
     # create the new lambda by uploading the zip.
     response = lambdacli.create_function(
@@ -43,7 +43,7 @@ def new_lambda(name, handler):
         Code={'ZipFile': zipfile.getvalue()},
         Publish=True,
         Description='Lambda with cloud object.',
-        Timeout=60,
+        Timeout=29,
         MemorySize=128
         # VpcConfig=VPC_CONFIG,
         # DeadLetterConfig={
