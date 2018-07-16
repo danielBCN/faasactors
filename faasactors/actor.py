@@ -1,5 +1,7 @@
-from .channel import Channel
 import inspect
+
+from .channel import Channel
+from .utils.database import create_actor_entry, load_actor, dump_actor
 
 
 class Actor(object):
@@ -12,12 +14,14 @@ class Actor(object):
 
     def create(self, *args, **kwargs):
         self.obj = self._class(*args, **kwargs)
+        create_actor_entry(self._name, self.obj)
 
     def load(self):
-        pass
+        self.obj = self._class()
+        self.obj = load_actor(self._name, self.obj)
 
     def dump(self):
-        pass
+        dump_actor(self._name, self.obj)
 
 
 class Proxy(object):
@@ -28,7 +32,8 @@ class Proxy(object):
 
         methods = inspect.getmembers(actor.obj, inspect.ismethod)
         for method in [meth[0] for meth in methods]:
-            setattr(self, method, TellWrapper(self.__channel, method, self.__actor_name))
+            setattr(self, method,
+                    TellWrapper(self.__channel, method, self.__actor_name))
 
 
 class TellWrapper(object):

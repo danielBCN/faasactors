@@ -1,4 +1,4 @@
-from faasactors.deploy import *
+from faasactors.utils.deploy import *
 from tests.handler_example import my_handler
 
 

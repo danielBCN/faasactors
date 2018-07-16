@@ -3,14 +3,7 @@ from faasactors import actor
 import unittest
 import inspect
 
-
-class Dummy(object):
-
-    def method1(self):
-        print("m1")
-
-    def method2(self):
-        print("m2")
+from .dummy import Dummy
 
 
 class TestBasic(unittest.TestCase):
@@ -26,3 +19,7 @@ class TestBasic(unittest.TestCase):
         p = actor.Proxy(a)
         print(p.__dict__)
         p.method1()
+
+        methods = inspect.getmembers(p, lambda x: isinstance(x, actor.TellWrapper))
+        print(methods)
+

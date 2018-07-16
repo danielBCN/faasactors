@@ -1,11 +1,6 @@
 from .__version__ import __version__
 from .actor import Actor, Proxy
 
-def client():
-    print("Client OK")
-    print(__version__)
-
-
 actors = {}
 
 
@@ -15,6 +10,11 @@ def spawn(name, klass, *args, **kwargs):
     actors["name"] = actor
 
     return Proxy(actor)
+
+
+def client():
+    print("Client OK")
+    print(__version__)
 
 
 if __name__ == '__main__':

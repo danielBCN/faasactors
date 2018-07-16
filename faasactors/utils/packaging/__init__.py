@@ -1,11 +1,10 @@
-import sys
-import os
 import io
+import os
+import sys
 import zipfile
 
-
-from faasactors.utils.module_dependency import ModuleDependencyAnalyzer
-import faasactors.utils.default_preinstalls
+from .default_preinstalls import modules
+from .module_dependency import ModuleDependencyAnalyzer
 
 
 def package_with_dependencies(func):
@@ -15,29 +14,29 @@ def package_with_dependencies(func):
     Returns a tuple with the zip file (in memory),
     and the path to that function inside the package.
     """
-    print(func.__module__)
+    # print(func.__module__)
     function_name = func.__name__
     module_name = func.__module__
     module = sys.modules[module_name]
 
     # Get dependencies
-    modulean = ModuleDependencyAnalyzer()
-    preinstalled_modules = [name for name, _ in faasactors.utils.default_preinstalls.modules]
-    modulean.ignore(preinstalled_modules)
-    modulean.add(module_name)
+    module_analyzer = ModuleDependencyAnalyzer()
+    preinstalled_modules = [name for name, _ in modules]
+    module_analyzer.ignore(preinstalled_modules)
+    module_analyzer.add(module_name)
 
-    mod_paths = modulean.get_and_clear_paths()
+    mod_paths = module_analyzer.get_and_clear_paths()
 
     # Package it all in a zip
     file_like_object = io.BytesIO()
     with zipfile.ZipFile(file_like_object, 'w') as newzip:
         for mod in mod_paths:
             if os.path.isdir(mod):
-                 for root, dirs, files in os.walk(mod):
-                     for file_ in files:
-                         newzip.write(os.path.join(root, file_),
-                                      os.path.relpath(os.path.join(root, file_),
-                                                      os.path.join(mod, '..')))
+                for root, dirs, files in os.walk(mod):
+                    for file_ in files:
+                        newzip.write(os.path.join(root, file_),
+                                     os.path.relpath(os.path.join(root, file_),
+                                                     os.path.join(mod, '..')))
             else:
                 newzip.write(mod, os.path.basename(mod))
 

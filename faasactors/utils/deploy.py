@@ -4,24 +4,15 @@ Utils to create lambda functions.
 import uuid
 import boto3
 
-
-from faasactors.utils.packaging import package_with_dependencies
-from faasactors.config import (AWS_ROLE_ARN, VPC_CONFIG, REDIS_HOST, REDIS_PORT, TOPIC_ARN,
-                    AWS_REGION, RESULT_QUEUE, SHUFFLER)
-
+from .packaging import package_with_dependencies
+from .config import AWS_ROLE_ARN, AWS_REGION
 
 lambdacli = boto3.client('lambda', region_name=AWS_REGION)
-sqscli = boto3.resource('sqs', region_name=AWS_REGION)
 
 
 def uuid_str():
-    """ Generate an uninque id."""
+    """ Generate an unique id."""
     return str(uuid.uuid4())
-
-
-def get_lambda_client():
-    """ Just returns a boto3 lambda client connection."""
-    return lambdacli
 
 
 def new_lambda(name, handler):
@@ -63,43 +54,30 @@ def new_lambda(name, handler):
         # }
     )
     print(response)
-    print("New lambda {} created successfully.".format(name))
+    print(f"New lambda {name} created successfully.")
 
 
 def delete_lambda(name):
     """ Deletes a lambda function from AWS with name *name*."""
     response = lambdacli.delete_function(FunctionName=name)
     print(response)
-    print("Lambda {} deleted successfully.".format(name))
+    print(f"Lambda {name} deleted successfully.")
 
 
 def set_lambda_concurrency(name, concurrency_value):
-    """ Sets the maximum amount of concurrent executions to a lambda function with name *name*."""
-    response = lambdacli.put_function_concurrency(FunctionName=name, ReservedConcurrentExecutions=concurrency_value)
-    print(response)
-    print("Lambda {} concurrency limit set to {} successfully.".format(name, concurrency_value))
-
-
-def getNewQueue(name,lambdaName):
-    # Get the service resource
-    sqs = boto3.resource('sqs')
-
-    # Create the queue. This returns an SQS.Queue instance
-    queue = sqs.create_queue(QueueName=name, Attributes={'DelaySeconds': '0'})
-    boto3.client("lambda").create_event_source_mapping(
-        EventSourceArn=queue.attributes.get('QueueArn'),
-        FunctionName=lambdaName,
+    """ Sets the maximum amount of concurrent executions to a lambda
+     function with name *name*."""
+    response = lambdacli.put_function_concurrency(
+        FunctionName=name,
+        ReservedConcurrentExecutions=concurrency_value
     )
+    print(response)
+    print(f"Lambda {name} concurrency limit set"
+          f" to {concurrency_value} successfully.")
 
 
-def sendMessage(queueName,message):
-    # Get the service resource
-    sqs = boto3.resource('sqs')
-
-    # Get the queue
-    queue = sqs.get_queue_by_name(QueueName=queueName)
-
-    # Create a new message
-    response = queue.send_message(MessageBody=message)
-
-
+def map_lambda_to_queue(queue_arn, lambda_name):
+    lambdacli.create_event_source_mapping(
+        EventSourceArn=queue_arn,
+        FunctionName=lambda_name,
+    )
