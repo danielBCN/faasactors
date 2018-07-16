@@ -4,7 +4,7 @@ CONFIGURATION CONSTANTS
 
 AWS_REGION = 'us-east-1'
 # The role needs access to the VPC, Elasticache, lambda, sns, sqs and logs.
-AWS_ROLE_ARN = 'arn:aws:iam::940615250901:role/service-role/Admin'
+AWS_ROLE_ARN = 'arn:aws:iam::786929956471:role/alvaroPickleTest'
 VPC_CONFIG = {
     'SubnetIds': [
         'subnet-xxxx',
