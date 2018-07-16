@@ -76,7 +76,7 @@ def set_lambda_concurrency(name, concurrency_value):
           f" to {concurrency_value} successfully.")
 
 
-def map_lambda_to_queue(queue_arn, lambda_name):
+def map_lambda_to_queue(lambda_name, queue_arn):
     lambdacli.create_event_source_mapping(
         EventSourceArn=queue_arn,
         FunctionName=lambda_name,

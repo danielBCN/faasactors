@@ -1,5 +1,3 @@
-
-
 class Dummy(object):
     attrK = 0
 
