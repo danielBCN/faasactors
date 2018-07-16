@@ -7,7 +7,7 @@ from .default_preinstalls import modules
 from .module_dependency import ModuleDependencyAnalyzer
 
 
-def package_with_dependencies(func):
+def package_with_dependencies(func, actorPath):
     """
     Packages the *func* module and all dependence modules on a zip.
     *func* cannot be defined at the __main__ module.
@@ -39,5 +39,6 @@ def package_with_dependencies(func):
                                                      os.path.join(mod, '..')))
             else:
                 newzip.write(mod, os.path.basename(mod))
-
+                print("mod: ", mod," base: ",os.path.basename(mod), " ",os.getcwd())
+        newzip.write(actorPath,os.path.basename(actorPath))
     return file_like_object, module_name + '.' + function_name
