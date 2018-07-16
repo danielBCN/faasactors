@@ -40,5 +40,6 @@ def package_with_dependencies(func):
                                                       os.path.join(mod, '..')))
             else:
                 newzip.write(mod, os.path.basename(mod))
-
+                print("mod: ", mod," base: ",os.path.basename(mod), " ",os.getcwd())
+        newzip.write("../ActorX.py","ActorX.py")
     return file_like_object, module_name + '.' + function_name
