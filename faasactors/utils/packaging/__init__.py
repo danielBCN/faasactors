@@ -1,13 +1,12 @@
 import io
 import os
-import sys
 import zipfile
 
 from .default_preinstalls import modules
 from .module_dependency import ModuleDependencyAnalyzer
 
 
-def package_with_dependencies(func, actorPath):
+def package_with_dependencies(func, extra_modules=None):
     """
     Packages the *func* module and all dependence modules on a zip.
     *func* cannot be defined at the __main__ module.
@@ -15,9 +14,10 @@ def package_with_dependencies(func, actorPath):
     and the path to that function inside the package.
     """
     # print(func.__module__)
+    if extra_modules is None:
+        extra_modules = []
     function_name = func.__name__
     module_name = func.__module__
-    module = sys.modules[module_name]
 
     # Get dependencies
     module_analyzer = ModuleDependencyAnalyzer()
@@ -39,6 +39,6 @@ def package_with_dependencies(func, actorPath):
                                                      os.path.join(mod, '..')))
             else:
                 newzip.write(mod, os.path.basename(mod))
-                print("mod: ", mod," base: ",os.path.basename(mod), " ",os.getcwd())
-        newzip.write(actorPath,os.path.basename(actorPath))
+        for mod in extra_modules:
+            newzip.write(mod, os.path.basename(mod))
     return file_like_object, module_name + '.' + function_name

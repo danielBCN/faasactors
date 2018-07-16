@@ -23,6 +23,10 @@ class Actor(object):
     def dump(self):
         dump_actor(self._name, self.obj)
 
+    def invoke(self, method_name, args=(), kwargs={}):
+        invoke = getattr(self.obj, method_name)
+        invoke(*args, **kwargs)
+
 
 class Proxy(object):
 

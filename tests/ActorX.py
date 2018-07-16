@@ -1,6 +1,3 @@
-class ActorX():
-    def sayHello(self):
+class ActorX(object):
+    def say_hello(self):
         print("Hello!!")
-
-
-

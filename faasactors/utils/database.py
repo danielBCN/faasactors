@@ -40,11 +40,11 @@ def create_actor_table():
 
 
 def create_actor_entry(actor_name, actor_instance):
-    atts = get_instance_attributes(actor_instance)
+    attrs = get_instance_attributes(actor_instance)
     table.put_item(
         Item={
             'actorID': actor_name,
-            'attributes': json.dumps(atts),
+            'attributes': json.dumps(attrs),
         }
     )
 
@@ -53,18 +53,18 @@ def load_actor(actor_name, actor_instance):
     response = table.get_item(
         Key={'actorID': actor_name}
     )
-    atts = json.loads(response['Item']['attributes'])
-    for att, val in atts.items():
+    attrs = json.loads(response['Item']['attributes'])
+    for att, val in attrs.items():
         setattr(actor_instance, att, val)
     return actor_instance
 
 
 def dump_actor(actor_name, actor_instance):
-    atts = get_instance_attributes(actor_instance)
+    attrs = get_instance_attributes(actor_instance)
     table.update_item(
         Key={'actorID': actor_name},
         AttributeUpdates={
-            'attributes': {'Value': json.dumps(atts)},
+            'attributes': {'Value': json.dumps(attrs)},
         }
     )
 
