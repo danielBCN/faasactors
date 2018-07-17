@@ -10,14 +10,17 @@ class Actor(object):
         self._name = name
         self._class = klass
         self._channel = Channel(name)
-        self.obj = None
+        self.obj = klass()
 
     def create(self, *args, **kwargs):
-        self.obj = self._class(*args, **kwargs)
+        # self.obj = self._class()
+        init_method = getattr(self.obj, "init_actor", None)
+        if callable(init_method):
+            init_method(*args, **kwargs)
         create_actor_entry(self._name, self.obj)
 
     def load(self):
-        self.obj = self._class()
+        # self.obj = self._class()
         self.obj = load_actor(self._name, self.obj)
 
     def dump(self):

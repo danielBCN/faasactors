@@ -7,8 +7,6 @@ from faasactors.utils import database
 
 
 class TestBasic(unittest.TestCase):
-    def setUpClass(cls):
-        database.create_actor_table()
 
     def setUp(self):
         pass

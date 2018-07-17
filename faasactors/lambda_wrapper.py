@@ -14,8 +14,8 @@ def lambda_wrapper(event, context):
         args = message["PARAMS"][0]
         kwargs = message["PARAMS"][1]
 
-        actor_clazz_name = "ActorX"  # FIXME: hardcoded
-        actor_module_name = actor_clazz_name  # FIXME: hardcoded
+        actor_clazz_name = "Node"  # FIXME: hardcoded
+        actor_module_name = "ring"  # FIXME: hardcoded
         actor_module = importlib.__import__(actor_module_name)
 
         clazz = getattr(actor_module, actor_clazz_name)
