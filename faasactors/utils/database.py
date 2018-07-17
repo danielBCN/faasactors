@@ -39,6 +39,9 @@ def create_actor_table():
     table = dynamodb_resource.Table(ACTOR_TABLE_NAME)
 
 
+create_actor_table()
+
+
 def create_actor_entry(actor_name, actor_instance):
     attrs = get_instance_attributes(actor_instance)
     table.put_item(

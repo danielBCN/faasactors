@@ -2,9 +2,6 @@ import importlib
 import json
 
 from faasactors.actor import Actor
-from .utils.database import create_actor_table
-
-create_actor_table()
 
 
 def lambda_wrapper(event, context):
