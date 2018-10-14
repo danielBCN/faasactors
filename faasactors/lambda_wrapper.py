@@ -1,7 +1,9 @@
 import importlib
 import json
-
+# from faasactors import client
+from tests.Ponger import Ponger
 from faasactors.actor import Actor
+import jsonpickle
 
 
 def lambda_wrapper(event, context):
@@ -14,7 +16,7 @@ def lambda_wrapper(event, context):
         args = message["PARAMS"][0]
         kwargs = message["PARAMS"][1]
 
-        actor_clazz_name = "ActorX"  # FIXME: hardcoded
+        actor_clazz_name = actor_name.split("_")[0]  # FIXME: hardcoded
         actor_module_name = actor_clazz_name  # FIXME: hardcoded
         actor_module = importlib.__import__(actor_module_name)
 

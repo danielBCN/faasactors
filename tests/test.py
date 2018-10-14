@@ -3,7 +3,7 @@ from tests.ActorX import ActorX
 
 
 def main():
-    actor = spawn("myActor", ActorX)
+    actor = spawn("myActor1", ActorX)
 
     actor.say_hello()
 

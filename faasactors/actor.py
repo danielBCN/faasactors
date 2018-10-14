@@ -10,6 +10,7 @@ class Actor(object):
         self._name = name
         self._class = klass
         self._channel = Channel(name)
+        #self._channel.create_new_queue()
         self.obj = None
 
     def create(self, *args, **kwargs):
