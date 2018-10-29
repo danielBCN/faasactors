@@ -24,6 +24,8 @@ def package_with_dependencies(func, extra_modules=None):
     preinstalled_modules = [name for name, _ in modules]
     module_analyzer.ignore(preinstalled_modules)
     module_analyzer.add(module_name)
+    for mod in extra_modules:
+        module_analyzer.add(mod)
 
     mod_paths = module_analyzer.get_and_clear_paths()
 
@@ -39,6 +41,6 @@ def package_with_dependencies(func, extra_modules=None):
                                                      os.path.join(mod, '..')))
             else:
                 newzip.write(mod, os.path.basename(mod))
-        for mod in extra_modules:
-            newzip.write(mod, os.path.basename(mod))
+        # for mod in extra_modules:
+        #     newzip.write(mod, os.path.basename(mod))
     return file_like_object, module_name + '.' + function_name

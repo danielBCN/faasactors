@@ -15,7 +15,8 @@ def uuid_str():
     return str(uuid.uuid4())
 
 
-def new_lambda(name, handler, actor_path):
+def new_lambda(name, handler, actor_path, klass, module):
+
     """
     Packages all files that the function *handler* depends on into a zip.
     Creates a new lambda with name *name* on AWS using that zip.
@@ -36,17 +37,18 @@ def new_lambda(name, handler, actor_path):
             Code={'ZipFile': zipfile.getvalue()},
             Publish=True,
             Description='Lambda with cloud object.',
-            Timeout=29,
-            MemorySize=128
+            Timeout=30,
+            MemorySize=3008,
             # VpcConfig=VPC_CONFIG,
             # DeadLetterConfig={
             #     'TargetArn': 'string'
             # },
-            #  Environment={
-            #    'Variables': {  # FIXME: Variables should be requested. Timeout too.
-            #        'ACTOR_CLASS_NAME': Actor
-            #    }
-            #  }
+             Environment={
+               'Variables': {
+                   'ACTOR_CLASS_NAME': str(klass),
+                   'ACTOR_MODULE_NAME': str(module)
+               }
+             }
             # KMSKeyArn='string',
             # TracingConfig={
             #     'Mode': 'Active'|'PassThrough'
@@ -62,7 +64,7 @@ def new_lambda(name, handler, actor_path):
         if LAMBDA_UPDATE:
             print("Updating Lambda...")
             delete_lambda(name)
-            new_lambda(name, handler, actor_path)
+            new_lambda(name, handler, actor_path, klass, module)
         else:
             print("*NO* Lambda update. Proceeding...")
 
@@ -81,7 +83,6 @@ def set_lambda_concurrency(name, concurrency_value):
         FunctionName=name,
         ReservedConcurrentExecutions=concurrency_value
     )
-    # print(response)
     print(f"Lambda {name} concurrency limit set"
           f" to {concurrency_value} successfully.")
 

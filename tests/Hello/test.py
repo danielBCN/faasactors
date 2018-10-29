@@ -1,5 +1,5 @@
 from faasactors.client import spawn
-from tests.ActorX import ActorX
+from tests.Hello.ActorX import ActorX
 
 
 def main():
